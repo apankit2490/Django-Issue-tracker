@@ -13,5 +13,5 @@ class TestProject(TestCase):
 
     def test_create_project(self):
         project_name=Project.objects.get(name='First_project')
-        self.assertEqual(project_name.name , 'First_project')
+        self.assertEqual(project_name.name , Project().get_name())
 
