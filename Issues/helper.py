@@ -23,3 +23,19 @@ PRIORITY_TYPE_CHOICES=(
     (LOW,'Low'),
     (LOWEST,'Lowest'),
 )
+
+OPEN='OP'
+ASSIGNED='AG'
+INPROGRESS='IP'
+UNDEREVIEW='UR'
+DONE='DN'
+CLOSE='CL'
+
+STATUS_TYPE_CHOICE=(
+    (OPEN,'Open'),
+    (ASSIGNED,'Assigned'),
+    (INPROGRESS,'Inprogress/ pending'),
+    (UNDEREVIEW,'under-review'),
+    (DONE,'Done'),
+    (CLOSE,'Close'),
+)
