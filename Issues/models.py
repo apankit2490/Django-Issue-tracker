@@ -51,6 +51,8 @@ class Issues(models.Model):
         issue_obj.save()
         return issue_obj
 
+    # def
+
 
     # def is_upperclass(self):
     #     return self.year_in_school in (self.JUNIOR, self.SENIOR)
