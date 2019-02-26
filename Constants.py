@@ -1,0 +1,8 @@
+TEST_PROJECT_NAME='First_project_test'
+TEST_PROJECT_DESCRIPTION='Test Description'
+TEST_ISSUE_TITILE='Test_issue'
+TEST_ISSUE_DESC='Test_description'
+TEST_ISSUE_SUMMARY='Test Summary'
+TEST_ISSUE_LABELS= 'Test Labels'
+TEST_ISSUE_BUG='BG'
+TEST_ISSUE_PRIORITY='HG'
