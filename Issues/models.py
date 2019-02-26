@@ -8,6 +8,7 @@ class Sprint(models.Model):
     Name=models.CharField(max_length=50)
     Project=models.ForeignKey(Project,on_delete=models.CASCADE,related_name='project_sprint',null=True)
 
+
     def __str__(self):
         return self.Name
 
@@ -44,12 +45,13 @@ class Issues(models.Model):
         return self.description
 
 
-    def create_issue(self,title, description, project,issue_type, summary, priority,labels,assignee):
+    def create_issue(self,title, description, project,issue_type, summary, priority,labels,assignee,sprint):
         assigned_user=User.objects.get(id=assignee)
         project_assigned=Project.objects.get(id=project)
+        sprint_obj=Sprint.objects.get(id=sprint)
         issue_obj=Issues.objects.create(title=title, description=description, project=project_assigned,
                               issue_type=issue_type, summary=summary, priority=priority,
-                              labels=labels,assignee=assigned_user)
+                              labels=labels,assignee=assigned_user,sprint=sprint_obj)
         issue_obj.save()
         return issue_obj
 

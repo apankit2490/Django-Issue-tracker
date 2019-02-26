@@ -16,10 +16,16 @@ def create_issue(requests):
     priority=requests.data.get('priority')
     labels=requests.data.get('labels')
     assignee=requests.data.get('assignee')
+    sprint=requests.data.get('sprint')
     issue_object = Issues().create_issue(title=title, description=description, project=p_id,
                                       issue_type=issue_type, summary=summary, priority=priority,
-                                      labels=labels, assignee=assignee)
+                                      labels=labels, assignee=assignee,sprint=sprint)
     serialiser=IssuesSerializer(issue_object)
     return Response(status=201,data=serialiser.data)
 
+@api_view(["GET"])
+def get_all_issues_of_project_api(requests,p_id):
+    filtered_issues_objs=Issues.issue_manager.get_all_issues_of_project(p_id)
+    serializer=IssuesSerializer(filtered_issues_objs,many=True)
+    return Response(status=201,data=serializer.data)
 
