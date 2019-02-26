@@ -20,6 +20,8 @@ class Issues(models.Model):
     def get_name(self):
         return self.description
 
+
+
     # def is_upperclass(self):
     #     return self.year_in_school in (self.JUNIOR, self.SENIOR)
 

@@ -10,9 +10,9 @@ from Issues.models import Issues
 class TestIssues(TestCase):
     def setUp(self):
         project_object= Project.objects.create(name=TEST_PROJECT_NAME,description=TEST_PROJECT_DESCRIPTION)
-        self.user = User.objects.create_user('ankit', 'lennon@thebeatles.com', 'johnpassword')
+        self.user = User.objects.create_user(TEST_ISSUE_NEW_USERNAME, TEST_ISSUE_NEW_EMAIL,TEST_ISSUE_NEW_PASSWORD)
         Issues.objects.create(title=TEST_ISSUE_TITILE, description=TEST_ISSUE_DESC, project=project_object,
-                              issue_type='BG', summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
+                              issue_type=TEST_ISSUE_BUG, summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
                               labels=TEST_ISSUE_LABELS,assignee=self.user)
 
     def test_title_issue(self):
@@ -41,7 +41,7 @@ class TestIssues(TestCase):
 
     def test_issue_user(self):
         issue_object = Issues.objects.get(assignee=self.user)
-        self.assertEqual(issue_object.assignee.get_username() ,'ankit')
+        self.assertEqual(issue_object.assignee.get_username() ,TEST_ISSUE_NEW_USERNAME)
 
 
 
