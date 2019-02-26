@@ -1,5 +1,7 @@
 TEST_PROJECT_NAME='First_project_test'
+TEST_PROJECT_NAME2='Second_project_test'
 TEST_PROJECT_DESCRIPTION='Test Description'
+TEST_PROJECT_DESCRIPTION2='Test Second Description'
 TEST_ISSUE_TITILE='Test_issue'
 TEST_ISSUE_DESC='Test_description'
 TEST_ISSUE_SUMMARY='Test Summary'
