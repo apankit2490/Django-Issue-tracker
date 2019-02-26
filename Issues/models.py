@@ -11,11 +11,20 @@ class Sprint(models.Model):
     def __str__(self):
         return self.Name
 
+class IssueManager(models.Manager):
+
+    def get_all_issues_of_project(self,project_id):
+        filtered_projects=Project.objects.get(pk=project_id)
+        all_issues=Issues.objects.all().filter(project=filtered_projects)
+        all_issues_decending_date=all_issues.order_by('create_date').reverse()
+        return all_issues_decending_date
 
 class Issues(models.Model):
     project=models.ForeignKey(Project,on_delete=models.CASCADE,related_name='project',null=True)
     title=models.CharField(max_length=50)
     description=models.TextField()
+    create_date=models.DateTimeField(auto_now_add=True)
+    update_date=models.DateTimeField('update date',auto_now_add=True)
     issue_type = models.CharField(max_length=2,choices=ISSUE_TYPE_CHOICES,default=TASK)
     status=models.CharField(max_length=2,choices=STATUS_TYPE_CHOICE,default=OPEN)
     summary = models.CharField(max_length=30,null=True)
@@ -23,6 +32,10 @@ class Issues(models.Model):
     labels = models.CharField(max_length=30,null=True)
     assignee = models.ForeignKey(User,on_delete=models.CASCADE,related_name='User',null=True,default=User)
     sprint=models.ForeignKey(Sprint,on_delete=models.CASCADE,related_name='sprint',null=True)
+
+    issue_manager=IssueManager()
+    objects=models.Manager()
+
 
     def get_title(self):
         return self.title
@@ -37,8 +50,6 @@ class Issues(models.Model):
                               labels=labels,assignee=assignee)
         issue_obj.save()
         return issue_obj
-
-
 
 
     # def is_upperclass(self):

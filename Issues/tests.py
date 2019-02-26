@@ -51,6 +51,14 @@ class TestIssues(TestCase):
                                                    self.project_object,'EP','teestcase summary','LW','testcase label',user)
         self.assertEqual(test_issue_obj.title,'testcase titile')
 
+    def test_get_all_issues_of_project(self):
+        get_all_issues_of_project=Issues.issue_manager.get_all_issues_of_project(1)
+        self.assertTrue(type(get_all_issues_of_project[0]) is Issues)
+
+
+
+
+
 
 
 
