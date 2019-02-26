@@ -15,6 +15,12 @@ class Project(models.Model):
     def get_all_project(self):
         return Project.objects.all()
 
+    def  get_project_details(self,project_id):
+        return Project.objects.get(pk=project_id)
+
+
+
+
     class Meta:
         db_table='Project'
 
