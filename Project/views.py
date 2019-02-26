@@ -29,3 +29,4 @@ def get_project_by_id(requests,p_id):
     project_objects=Project().get_project_details(p_id)
     serializer=ProjectSerializer(project_objects)
     return Response(status=201,data=serializer.data)
+

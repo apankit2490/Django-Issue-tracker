@@ -45,9 +45,11 @@ class Issues(models.Model):
 
 
     def create_issue(self,title, description, project,issue_type, summary, priority,labels,assignee):
-        issue_obj=Issues.objects.create(title=title, description=description, project=project,
+        assigned_user=User.objects.get(id=assignee)
+        project_assigned=Project.objects.get(id=project)
+        issue_obj=Issues.objects.create(title=title, description=description, project=project_assigned,
                               issue_type=issue_type, summary=summary, priority=priority,
-                              labels=labels,assignee=assignee)
+                              labels=labels,assignee=assigned_user)
         issue_obj.save()
         return issue_obj
 

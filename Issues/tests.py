@@ -46,9 +46,8 @@ class TestIssues(TestCase):
         self.assertEqual(issue_object.assignee.get_username() ,TEST_ISSUE_NEW_USERNAME)
 
     def test_create_issue(self):
-        user=User.objects.create_user('test_user', TEST_ISSUE_NEW_EMAIL,TEST_ISSUE_NEW_PASSWORD)
         test_issue_obj=self.issue_obj.create_issue('testcase titile','test_case description',
-                                                   self.project_object,'EP','teestcase summary','LW','testcase label',user)
+                                                   1,'EP','teestcase summary','LW','testcase label',1)
         self.assertEqual(test_issue_obj.title,'testcase titile')
 
     def test_get_all_issues_of_project(self):
