@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from Issues.models import Issues
-from Issues.serializers import IssuesSerializer
+from Issues.serializers import IssuesSerializer, LabelSerializer
 
 
 @api_view(["POST"])
@@ -65,6 +65,15 @@ def get_issue_assigned_to_user_api(requests):
     result=Issues.issue_manager.get_issue_assigned_to_user(uid)
     serialiser = IssuesSerializer(result,many=True)
     return Response(status=201,data=serialiser.data)
+
+@api_view(["POST"])
+def add_label_to_issue_api(requests):
+    issue_id=requests.data.get('issue_id')
+    label=requests.data.get('label')
+    label_object=Issues.issue_manager.add_label_to_issue(issue_id,label)
+    serialiser = LabelSerializer(label_object)
+    return Response(status=201, data=serialiser.data)
+
 
 
 

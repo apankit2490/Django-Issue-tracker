@@ -72,6 +72,13 @@ class Testapi_issue(TestCase):
         self.assertEqual(response.status_code,201)
         self.assertEqual(response.data[0].get('assignee'),2)
 
+    def test_add_label_to_issue_api(self):
+        url=self.base_url+'/add-label-issue/'
+        payload={"issue_id":1,"label":"java"}
+        response=self.client.post(url,data=payload)
+        self.assertEqual(response.status_code,201)
+        self.assertTrue(response.data.get('Name')=='java')
+
 
 
 
