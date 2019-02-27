@@ -20,6 +20,13 @@ class IssueManager(models.Manager):
         all_issues_decending_date=all_issues.order_by('create_date').reverse()
         return all_issues_decending_date
 
+    def get_all_issues_of_project_without_ordering(self,project_id):
+        filtered_projects=Project.objects.get(pk=project_id)
+        all_issues=Issues.objects.all().filter(project=filtered_projects)
+        return all_issues
+
+    # def get_all_issues_of_project_pagination(self):
+
 class Issues(models.Model):
     project=models.ForeignKey(Project,on_delete=models.CASCADE,related_name='project',null=True)
     title=models.CharField(max_length=50)
@@ -55,7 +62,6 @@ class Issues(models.Model):
         issue_obj.save()
         return issue_obj
 
-    # def
 
 
     # def is_upperclass(self):

@@ -29,3 +29,12 @@ def get_all_issues_of_project_api(requests,p_id):
     serializer=IssuesSerializer(filtered_issues_objs,many=True)
     return Response(status=201,data=serializer.data)
 
+@api_view(["GET"])
+def get_all_issues_of_project_pagination_api(requests,p_id, offset, limit):
+    filtered_objs=Issues.issue_manager.get_all_issues_of_project_without_ordering(p_id)[offset-1:limit]
+    serialiser=IssuesSerializer(filtered_objs,many=True)
+    return Response(status=201,data=serialiser.data)
+
+
+
+

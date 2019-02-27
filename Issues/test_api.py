@@ -34,6 +34,15 @@ class Testapi_issue(TestCase):
         self.assertEqual(response.status_code,201)
         self.assertTrue(response.data[0].get('project')==1)
 
+    def test_get_all_issues_of_project_pagination_api(self):
+        url=self.base_url+'/get-issues-project/pagination/'
+        p_id='1'
+        offset='1'
+        limit='2'
+        response=self.client.get(url+p_id+'/'+offset+'/'+limit+'/')
+        self.assertEqual(response.status_code,201)
+        self.assertEqual(len(response.data),1)
+
 
 
 
