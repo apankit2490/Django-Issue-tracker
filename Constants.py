@@ -17,3 +17,4 @@ test_api_create_issue_payload = {'title': 'test case title', 'description': 'tes
                                  'labels': 'testcase label', 'assignee': 1,'sprint':1}
 
 test_api_assign_issue_payoad={"issue_id":2,"user_id":2}
+test_api_update_status_payload={"issue_id":1,"update_status":"AG"}

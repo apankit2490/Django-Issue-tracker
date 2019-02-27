@@ -55,6 +55,12 @@ class Testapi_issue(TestCase):
         response=self.client.post(url,data=payload)
         self.assertEqual(response.status_code,201)
 
+    def test_update_issue_status_api(self):
+        url=self.base_url+'/update-status/'
+        payload=test_api_update_status_payload
+        response=self.client.post(url,data=payload)
+        self.assertEqual(response.status_code,201)
+
 
 
 
