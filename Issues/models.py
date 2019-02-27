@@ -8,6 +8,7 @@ class Sprint(models.Model):
     Name=models.CharField(max_length=50)
     Project=models.ForeignKey(Project,on_delete=models.CASCADE,related_name='project_sprint',null=True)
 
+
     def __str__(self):
         return self.Name
 
@@ -18,6 +19,13 @@ class IssueManager(models.Manager):
         all_issues=Issues.objects.all().filter(project=filtered_projects)
         all_issues_decending_date=all_issues.order_by('create_date').reverse()
         return all_issues_decending_date
+
+    def get_all_issues_of_project_without_ordering(self,project_id):
+        filtered_projects=Project.objects.get(pk=project_id)
+        all_issues=Issues.objects.all().filter(project=filtered_projects)
+        return all_issues
+
+    # def get_all_issues_of_project_pagination(self):
 
 class Issues(models.Model):
     project=models.ForeignKey(Project,on_delete=models.CASCADE,related_name='project',null=True)
@@ -44,14 +52,16 @@ class Issues(models.Model):
         return self.description
 
 
-    def create_issue(self,title, description, project,issue_type, summary, priority,labels,assignee):
-        issue_obj=Issues.objects.create(title=title, description=description, project=project,
+    def create_issue(self,title, description, project,issue_type, summary, priority,labels,assignee,sprint):
+        assigned_user=User.objects.get(id=assignee)
+        project_assigned=Project.objects.get(id=project)
+        sprint_obj=Sprint.objects.get(id=sprint)
+        issue_obj=Issues.objects.create(title=title, description=description, project=project_assigned,
                               issue_type=issue_type, summary=summary, priority=priority,
-                              labels=labels,assignee=assignee)
+                              labels=labels,assignee=assigned_user,sprint=sprint_obj)
         issue_obj.save()
         return issue_obj
 
-    # def
 
 
     # def is_upperclass(self):

@@ -23,4 +23,6 @@ from Project import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('Project.urls'),name='get'),
+    path('api/', include('Issues.urls'),name='issues'),
+
 ]

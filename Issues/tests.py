@@ -5,7 +5,7 @@ from Project.models import Project
 from Constants import *
 
 # Create your tests here.
-from Issues.models import Issues
+from Issues.models import Issues, Sprint
 
 
 class TestIssues(TestCase):
@@ -16,6 +16,7 @@ class TestIssues(TestCase):
                               issue_type=TEST_ISSUE_BUG, summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
                               labels=TEST_ISSUE_LABELS,assignee=self.user)
         self.issue_obj=Issues()
+        self.sprint = Sprint.objects.create(Name='Sprint 3', Project=self.project_object)
 
     def test_title_issue(self):
         issue_object=Issues.objects.get(title=TEST_ISSUE_TITILE)
@@ -46,9 +47,8 @@ class TestIssues(TestCase):
         self.assertEqual(issue_object.assignee.get_username() ,TEST_ISSUE_NEW_USERNAME)
 
     def test_create_issue(self):
-        user=User.objects.create_user('test_user', TEST_ISSUE_NEW_EMAIL,TEST_ISSUE_NEW_PASSWORD)
         test_issue_obj=self.issue_obj.create_issue('testcase titile','test_case description',
-                                                   self.project_object,'EP','teestcase summary','LW','testcase label',user)
+                                                   1,'EP','teestcase summary','LW','testcase label',1,1)
         self.assertEqual(test_issue_obj.title,'testcase titile')
 
     def test_get_all_issues_of_project(self):
