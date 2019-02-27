@@ -1,3 +1,5 @@
+from logging import basicConfig
+
 from django.contrib.auth.models import User
 from django.contrib.sites import requests
 from django.db.models import QuerySet
@@ -13,9 +15,16 @@ class Testapi_issue(TestCase):
     def setUp(self):
         self.client = Client()
         self.base_url='/api/issues'
+        self.user = User.objects.create_user('admin', TEST_ISSUE_NEW_EMAIL, 'admin').is_superuser=True
         self.project_object = Project.objects.create(name=TEST_PROJECT_NAME, description=TEST_PROJECT_DESCRIPTION)
         self.user = User.objects.create_user(TEST_ISSUE_NEW_USERNAME, TEST_ISSUE_NEW_EMAIL, TEST_ISSUE_NEW_PASSWORD)
+        self.user2 = User.objects.create_user(TEST_ISSUE_NEW_USERNAME2, 'sss@gmail.com', TEST_ISSUE_NEW_PASSWORD)
+        self.project_object2 = Project.objects.create(name=TEST_PROJECT_NAME, description=TEST_PROJECT_DESCRIPTION,
+                                                      user=self.user2)
         Issues.objects.create(title=TEST_ISSUE_TITILE, description=TEST_ISSUE_DESC, project=self.project_object,
+                              issue_type=TEST_ISSUE_BUG, summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
+                              labels=TEST_ISSUE_LABELS, assignee=self.user)
+        Issues.objects.create(title='', description=TEST_ISSUE_DESC, project=self.project_object2,
                               issue_type=TEST_ISSUE_BUG, summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
                               labels=TEST_ISSUE_LABELS, assignee=self.user)
         self.issue_obj = Issues()
@@ -42,6 +51,28 @@ class Testapi_issue(TestCase):
         response=self.client.get(url+p_id+'/'+offset+'/'+limit+'/')
         self.assertEqual(response.status_code,201)
         self.assertEqual(len(response.data),1)
+
+    def test_assign_issue_to_user_api(self):
+        url=self.base_url+'/assign-issue/'
+        payload=test_api_assign_issue_payoad
+        response=self.client.post(url,data=payload)
+        self.assertEqual(response.status_code,201)
+
+    def test_update_issue_status_api(self):
+        url=self.base_url+'/update-status/'
+        payload=test_api_update_status_payload
+        response=self.client.post(url,data=payload)
+        self.assertEqual(response.status_code,201)
+
+    # def test_get_issue_assigned_to_user_api(self):
+    #     url=self.base_url+'/get-issues-user/'
+    #     response=self.client.get(url,)
+    #     self.assertEqual(response.status_code,201)
+    #     # self.assertEqual(response.data[0].get('as'))
+
+
+
+
 
 
 

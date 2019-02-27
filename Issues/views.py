@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -34,6 +35,35 @@ def get_all_issues_of_project_pagination_api(requests,p_id, offset, limit):
     filtered_objs=Issues.issue_manager.get_all_issues_of_project_without_ordering(p_id)[offset-1:limit]
     serialiser=IssuesSerializer(filtered_objs,many=True)
     return Response(status=201,data=serialiser.data)
+
+@api_view(["POST"])
+def assign_issue_to_user_api(requests):
+    issue_id=requests.data.get('issue_id')
+    user_id=requests.data.get('user_id')
+    # try:
+    issues_updated=Issues.issue_manager.assign_issue_to_user(issue_id,user_id)
+    serialiser=IssuesSerializer(issues_updated)
+    return Response(status=201,data=serialiser.data)
+    # except ObjectDoesNotExist:
+    #     return Response("requested user is not in the active project",status=202)
+
+@api_view(["POST"])
+def update_issue_status_api(requests):
+    issue_id=requests.data.get('issue_id')
+    update_status=requests.data.get('update_status')
+    status_updated_issues=Issues.issue_manager.update_issue_status(issue_id,update_status)
+    serialiser = IssuesSerializer(status_updated_issues)
+    return Response(status=201,data=serialiser.data)
+
+@api_view(["GET"])
+def get_issue_assigned_to_user_api(requests):
+    current_user = requests.user
+    uid=current_user.id
+    result=Issues.issue_manager.get_issue_assigned_to_user(uid)
+    serialiser = IssuesSerializer(result,many=True)
+    return Response(status=201,data=serialiser.data)
+
+
 
 
 

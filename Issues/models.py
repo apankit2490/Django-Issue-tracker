@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from Project.models import Project
 from django.contrib.auth.models import User
@@ -24,6 +25,61 @@ class IssueManager(models.Manager):
         filtered_projects=Project.objects.get(pk=project_id)
         all_issues=Issues.objects.all().filter(project=filtered_projects)
         return all_issues
+
+    def assign_issue_to_user(self,issue_id,user_id):
+        issues=Issues.objects.get(id=issue_id)
+        active_user=issues.project.user.id
+        if(user_id==active_user):
+            user=User.objects.get(id=user_id)
+            issues.assignee=user
+            issues.save()
+            return issues
+        else:
+            return None
+
+    def update_issue_status(self,issue_id, updated_status):
+        issue_object=Issues.objects.get(id=issue_id)
+        status=issue_object.status
+        if(status=='OP' and updated_status=='AG'):
+            issue_object.status=updated_status
+            issue_object.save()
+            return issue_object
+
+        elif(status=='AG' and updated_status=='IP'):
+            issue_object.status=updated_status
+            issue_object.save()
+            return issue_object
+
+        elif (status == 'IP' and updated_status == 'UR'):
+            issue_object.status = updated_status
+            issue_object.save()
+            return issue_object
+
+        elif (status == 'UR' and updated_status == 'DN'):
+            issue_object.status = updated_status
+            issue_object.save()
+            return issue_object
+
+        elif (status == 'DN' and updated_status == 'CL'):
+            issue_object.status = updated_status
+            issue_object.save()
+            return issue_object
+
+        else:
+            raise ObjectDoesNotExist
+
+    def get_issue_assigned_to_user(self,user_id):
+        filtered_users = User.objects.get(id=user_id)
+        all_issues = Issues.objects.all().filter(assignee=filtered_users)
+        all_issues_decending_date = all_issues.order_by('create_date').reverse()
+        return all_issues_decending_date
+
+    #
+    # def get_issue_assigned_to_user(self,user_id):
+    #     self.
+
+
+
 
     # def get_all_issues_of_project_pagination(self):
 
