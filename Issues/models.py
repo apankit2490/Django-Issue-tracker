@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from Project.models import Project
 from django.contrib.auth.models import User
@@ -24,6 +25,24 @@ class IssueManager(models.Manager):
         filtered_projects=Project.objects.get(pk=project_id)
         all_issues=Issues.objects.all().filter(project=filtered_projects)
         return all_issues
+
+    def assign_issue_to_user(self,issue_id,user_id):
+        issues=Issues.objects.get(id=issue_id)
+        active_user=issues.project.user.id
+        if(user_id==active_user):
+            user=User.objects.get(id=user_id)
+            issues.assignee=user
+            issues.save()
+            return issues
+        else:
+            return None
+
+    #
+    # def get_issue_assigned_to_user(self,user_id):
+    #     self.
+
+
+
 
     # def get_all_issues_of_project_pagination(self):
 

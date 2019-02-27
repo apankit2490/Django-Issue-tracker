@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -5,6 +6,7 @@ from django.db import models
 class Project(models.Model):
     name=models.CharField(max_length=30)
     description=models.CharField(max_length=30,null=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='User_project',null=True,default=User)
 
     def __str__(self):
         return self.name
