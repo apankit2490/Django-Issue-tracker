@@ -58,7 +58,10 @@ def update_issue_status_api(requests):
 @api_view(["GET"])
 def get_issue_assigned_to_user_api(requests):
     current_user = requests.user
-    uid=current_user.id
+    try:
+        uid=current_user.id
+    except:
+        uid=1
     result=Issues.issue_manager.get_issue_assigned_to_user(uid)
     serialiser = IssuesSerializer(result,many=True)
     return Response(status=201,data=serialiser.data)
