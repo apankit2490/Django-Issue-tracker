@@ -73,4 +73,31 @@ class TestIssues(TestCase):
         update='AG'
         update_status=Issues.issue_manager.update_issue_status(issue_id,update)
         self.assertEqual(update_status.status,'AG')
+        issue_id = 1
+        update = 'IP'
+        update_status = Issues.issue_manager.update_issue_status(issue_id, update)
+        self.assertEqual(update_status.status, 'IP')
+        issue_id = 1
+        update = 'UR'
+        update_status = Issues.issue_manager.update_issue_status(issue_id, update)
+        self.assertEqual(update_status.status, 'UR')
+        issue_id = 1
+        update = 'DN'
+        update_status = Issues.issue_manager.update_issue_status(issue_id, update)
+        self.assertEqual(update_status.status, 'DN')
+        issue_id = 1
+        update = 'CL'
+        update_status = Issues.issue_manager.update_issue_status(issue_id, update)
+        self.assertEqual(update_status.status, 'CL')
+
+    def test_get_issue_assigned_to_user(self):
+        uid=1
+        issues=Issues.issue_manager.get_issue_assigned_to_user(uid)
+        self.assertEqual(type(issues[0]),Issues)
+
+
+
+
+
+
 

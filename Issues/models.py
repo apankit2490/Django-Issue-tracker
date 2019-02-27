@@ -68,6 +68,11 @@ class IssueManager(models.Manager):
         else:
             raise ObjectDoesNotExist
 
+    def get_issue_assigned_to_user(self,user_id):
+        filtered_users = User.objects.get(id=user_id)
+        all_issues = Issues.objects.all().filter(assignee=filtered_users)
+        all_issues_decending_date = all_issues.order_by('create_date').reverse()
+        return all_issues_decending_date
 
     #
     # def get_issue_assigned_to_user(self,user_id):
