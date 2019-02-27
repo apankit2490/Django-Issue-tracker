@@ -6,7 +6,7 @@ from django.db.models import QuerySet
 from django.test import TestCase, Client
 from Constants import *
 # Create your tests here.
-from Issues.models import Issues, Sprint
+from Issues.models import Issues, Sprint, Labels_issues
 from Project.models import Project
 from rest_framework.test import APIClient
 
@@ -23,10 +23,10 @@ class Testapi_issue(TestCase):
                                                       user=self.user2)
         Issues.objects.create(title=TEST_ISSUE_TITILE, description=TEST_ISSUE_DESC, project=self.project_object,
                               issue_type=TEST_ISSUE_BUG, summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
-                              labels=TEST_ISSUE_LABELS, assignee=self.user)
+                               assignee=self.user)
         Issues.objects.create(title='', description=TEST_ISSUE_DESC, project=self.project_object2,
                               issue_type=TEST_ISSUE_BUG, summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
-                              labels=TEST_ISSUE_LABELS, assignee=self.user)
+                              assignee=self.user)
         self.issue_obj = Issues()
         self.sprint = Sprint.objects.create(Name='Sprint 3', Project=self.project_object)
         self.client.login(username=self.user_admin.username, password=self.user_admin.password)

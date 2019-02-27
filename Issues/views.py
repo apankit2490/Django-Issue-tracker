@@ -20,7 +20,7 @@ def create_issue(requests):
     sprint=requests.data.get('sprint')
     issue_object = Issues().create_issue(title=title, description=description, project=p_id,
                                       issue_type=issue_type, summary=summary, priority=priority,
-                                      labels=labels, assignee=assignee,sprint=sprint)
+                                       assignee=assignee,sprint=sprint)
     serialiser=IssuesSerializer(issue_object)
     return Response(status=201,data=serialiser.data)
 

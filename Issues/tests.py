@@ -5,7 +5,7 @@ from Project.models import Project
 from Constants import *
 
 # Create your tests here.
-from Issues.models import Issues, Sprint
+from Issues.models import Issues, Sprint, Labels_issues
 
 
 class TestIssues(TestCase):
@@ -13,9 +13,11 @@ class TestIssues(TestCase):
         self.user = User.objects.create_user(TEST_ISSUE_NEW_USERNAME, TEST_ISSUE_NEW_EMAIL,TEST_ISSUE_NEW_PASSWORD)
         self.project_object = Project.objects.create(name=TEST_PROJECT_NAME, description=TEST_PROJECT_DESCRIPTION,
                                                      user=self.user)
+
         Issues.objects.create(title=TEST_ISSUE_TITILE, description=TEST_ISSUE_DESC, project=self.project_object,
                               issue_type=TEST_ISSUE_BUG, summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
-                              labels=TEST_ISSUE_LABELS,assignee=self.user)
+                              assignee=self.user)
+
         self.issue_obj=Issues()
         self.sprint = Sprint.objects.create(Name='Sprint 3', Project=self.project_object)
 
@@ -39,17 +41,16 @@ class TestIssues(TestCase):
         issue_object = Issues.objects.get(summary=TEST_ISSUE_SUMMARY)
         self.assertTrue(issue_object.summary==TEST_ISSUE_SUMMARY)
 
-    def test_issue_labels(self):
-        issue_object = Issues.objects.get(labels=TEST_ISSUE_LABELS)
-        self.assertTrue(issue_object.labels == TEST_ISSUE_LABELS)
+
 
     def test_issue_user(self):
         issue_object = Issues.objects.get(assignee=self.user)
         self.assertEqual(issue_object.assignee.get_username() ,TEST_ISSUE_NEW_USERNAME)
 
     def test_create_issue(self):
-        test_issue_obj=self.issue_obj.create_issue('testcase titile','test_case description',
-                                                   1,'EP','teestcase summary','LW','testcase label',1,1)
+        test_issue_obj=self.issue_obj.create_issue(title='testcase titile',description='test_case description',
+                                                   project=1,issue_type='EP',summary='teestcase summary',priority='LW',
+                                                   assignee=1,sprint=1)
         self.assertEqual(test_issue_obj.title,'testcase titile')
 
     def test_get_all_issues_of_project(self):
@@ -95,6 +96,11 @@ class TestIssues(TestCase):
         issues=Issues.issue_manager.get_issue_assigned_to_user(uid)
         self.assertEqual(type(issues[0]),Issues)
 
+    def test_add_label_to_issue(self):
+        issue_id=1
+        name='django'
+        label_object=Issues.issue_manager.add_label_to_issue(issue_id,name)
+        self.assertEqual(label_object.Name,name)
 
 
 

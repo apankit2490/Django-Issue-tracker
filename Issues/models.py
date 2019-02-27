@@ -9,9 +9,12 @@ class Sprint(models.Model):
     Name=models.CharField(max_length=50)
     Project=models.ForeignKey(Project,on_delete=models.CASCADE,related_name='project_sprint',null=True)
 
-
     def __str__(self):
         return self.Name
+
+
+
+
 
 class IssueManager(models.Manager):
 
@@ -74,6 +77,12 @@ class IssueManager(models.Manager):
         all_issues_decending_date = all_issues.order_by('create_date').reverse()
         return all_issues_decending_date
 
+    def add_label_to_issue(self,issue_id, label):
+        issue_obj=Issues.objects.get(id=issue_id)
+        label_obj=Labels_issues.objects.create(Name=label,Issue=issue_obj)
+        label_obj.save()
+        return label_obj
+
     #
     # def get_issue_assigned_to_user(self,user_id):
     #     self.
@@ -82,6 +91,7 @@ class IssueManager(models.Manager):
 
 
     # def get_all_issues_of_project_pagination(self):
+
 
 class Issues(models.Model):
     project=models.ForeignKey(Project,on_delete=models.CASCADE,related_name='project',null=True)
@@ -93,7 +103,6 @@ class Issues(models.Model):
     status=models.CharField(max_length=2,choices=STATUS_TYPE_CHOICE,default=OPEN)
     summary = models.CharField(max_length=30,null=True)
     priority = models.CharField(max_length=2,choices=PRIORITY_TYPE_CHOICES,default=MEDIUM,null=True)
-    labels = models.CharField(max_length=30,null=True)
     assignee = models.ForeignKey(User,on_delete=models.CASCADE,related_name='User',null=True,default=User)
     sprint=models.ForeignKey(Sprint,on_delete=models.CASCADE,related_name='sprint',null=True)
 
@@ -108,19 +117,28 @@ class Issues(models.Model):
         return self.description
 
 
-    def create_issue(self,title, description, project,issue_type, summary, priority,labels,assignee,sprint):
+    def create_issue(self,title, description, project,issue_type, summary,priority,assignee,sprint):
         assigned_user=User.objects.get(id=assignee)
         project_assigned=Project.objects.get(id=project)
         sprint_obj=Sprint.objects.get(id=sprint)
         issue_obj=Issues.objects.create(title=title, description=description, project=project_assigned,
                               issue_type=issue_type, summary=summary, priority=priority,
-                              labels=labels,assignee=assigned_user,sprint=sprint_obj)
+                              assignee=assigned_user,sprint=sprint_obj)
         issue_obj.save()
         return issue_obj
 
+class Labels_issues(models.Model):
+    Name = models.CharField(max_length=30)
+    Issue = models.ForeignKey(Issues, on_delete=models.CASCADE, related_name='project_labesl_2', null=True)
+
+    def __str__(self):
+        return self.Name
 
 
-    # def is_upperclass(self):
-    #     return self.year_in_school in (self.JUNIOR, self.SENIOR)
+
+
+
+
+
 
 
