@@ -6,7 +6,7 @@ from django.db.models import QuerySet
 from django.test import TestCase, Client
 from Constants import *
 # Create your tests here.
-from Issues.models import Issues, Sprint
+from Issues.models import Issues, Sprint, Labels_issues
 from Project.models import Project
 from rest_framework.test import APIClient
 
@@ -15,7 +15,7 @@ class Testapi_issue(TestCase):
     def setUp(self):
         self.client = Client()
         self.base_url='/api/issues'
-        self.user = User.objects.create_user('admin', TEST_ISSUE_NEW_EMAIL, 'admin').is_superuser=True
+        self.user_admin = User.objects.create_superuser('admin', TEST_ISSUE_NEW_EMAIL, 'admin')
         self.project_object = Project.objects.create(name=TEST_PROJECT_NAME, description=TEST_PROJECT_DESCRIPTION)
         self.user = User.objects.create_user(TEST_ISSUE_NEW_USERNAME, TEST_ISSUE_NEW_EMAIL, TEST_ISSUE_NEW_PASSWORD)
         self.user2 = User.objects.create_user(TEST_ISSUE_NEW_USERNAME2, 'sss@gmail.com', TEST_ISSUE_NEW_PASSWORD)
@@ -23,12 +23,13 @@ class Testapi_issue(TestCase):
                                                       user=self.user2)
         Issues.objects.create(title=TEST_ISSUE_TITILE, description=TEST_ISSUE_DESC, project=self.project_object,
                               issue_type=TEST_ISSUE_BUG, summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
-                              labels=TEST_ISSUE_LABELS, assignee=self.user)
+                               assignee=self.user)
         Issues.objects.create(title='', description=TEST_ISSUE_DESC, project=self.project_object2,
                               issue_type=TEST_ISSUE_BUG, summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
-                              labels=TEST_ISSUE_LABELS, assignee=self.user)
+                              assignee=self.user)
         self.issue_obj = Issues()
         self.sprint = Sprint.objects.create(Name='Sprint 3', Project=self.project_object)
+        self.client.login(username=self.user_admin.username, password=self.user_admin.password)
 
     def test_create_issue_api(self):
         url=self.base_url+'/create-issue/'
@@ -64,11 +65,19 @@ class Testapi_issue(TestCase):
         response=self.client.post(url,data=payload)
         self.assertEqual(response.status_code,201)
 
-    # def test_get_issue_assigned_to_user_api(self):
-    #     url=self.base_url+'/get-issues-user/'
-    #     response=self.client.get(url,)
-    #     self.assertEqual(response.status_code,201)
-    #     # self.assertEqual(response.data[0].get('as'))
+    def test_get_issue_assigned_to_user_api(self):
+        self.client.login(username='ankit', password='johnpassword')
+        url=self.base_url+'/get-issues-user/'
+        response=self.client.get(url)
+        self.assertEqual(response.status_code,201)
+        self.assertEqual(response.data[0].get('assignee'),2)
+
+    def test_add_label_to_issue_api(self):
+        url=self.base_url+'/add-label-issue/'
+        payload={"issue_id":1,"label":"java"}
+        response=self.client.post(url,data=payload)
+        self.assertEqual(response.status_code,201)
+        self.assertTrue(response.data.get('Name')=='java')
 
 
 

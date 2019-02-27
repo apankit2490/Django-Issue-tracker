@@ -14,7 +14,7 @@ TEST_ISSUE_NEW_EMAIL='lennon@thebeatles.com'
 TEST_ISSUE_NEW_PASSWORD='johnpassword'
 test_api_create_issue_payload = {'title': 'test case title', 'description': 'test_case description', 'project_id': 1,
                                  'issue_type': 'EP', 'summary': 'teestcase summary', 'priority': 'LW',
-                                 'labels': 'testcase label', 'assignee': 1,'sprint':1}
+                                 'assignee': 1,'sprint':1}
 
 test_api_assign_issue_payoad={"issue_id":2,"user_id":2}
 test_api_update_status_payload={"issue_id":1,"update_status":"AG"}

@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from Issues.models import Issues
-from Issues.serializers import IssuesSerializer
+from Issues.serializers import IssuesSerializer, LabelSerializer
 
 
 @api_view(["POST"])
@@ -20,7 +20,7 @@ def create_issue(requests):
     sprint=requests.data.get('sprint')
     issue_object = Issues().create_issue(title=title, description=description, project=p_id,
                                       issue_type=issue_type, summary=summary, priority=priority,
-                                      labels=labels, assignee=assignee,sprint=sprint)
+                                       assignee=assignee,sprint=sprint)
     serialiser=IssuesSerializer(issue_object)
     return Response(status=201,data=serialiser.data)
 
@@ -58,10 +58,22 @@ def update_issue_status_api(requests):
 @api_view(["GET"])
 def get_issue_assigned_to_user_api(requests):
     current_user = requests.user
-    uid=current_user.id
+    try:
+        uid=current_user.id
+    except:
+        uid=1
     result=Issues.issue_manager.get_issue_assigned_to_user(uid)
     serialiser = IssuesSerializer(result,many=True)
     return Response(status=201,data=serialiser.data)
+
+@api_view(["POST"])
+def add_label_to_issue_api(requests):
+    issue_id=requests.data.get('issue_id')
+    label=requests.data.get('label')
+    label_object=Issues.issue_manager.add_label_to_issue(issue_id,label)
+    serialiser = LabelSerializer(label_object)
+    return Response(status=201, data=serialiser.data)
+
 
 
 
