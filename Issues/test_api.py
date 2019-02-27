@@ -1,3 +1,5 @@
+from logging import basicConfig
+
 from django.contrib.auth.models import User
 from django.contrib.sites import requests
 from django.db.models import QuerySet
@@ -13,6 +15,7 @@ class Testapi_issue(TestCase):
     def setUp(self):
         self.client = Client()
         self.base_url='/api/issues'
+        self.user = User.objects.create_user('admin', TEST_ISSUE_NEW_EMAIL, 'admin').is_superuser=True
         self.project_object = Project.objects.create(name=TEST_PROJECT_NAME, description=TEST_PROJECT_DESCRIPTION)
         self.user = User.objects.create_user(TEST_ISSUE_NEW_USERNAME, TEST_ISSUE_NEW_EMAIL, TEST_ISSUE_NEW_PASSWORD)
         self.user2 = User.objects.create_user(TEST_ISSUE_NEW_USERNAME2, 'sss@gmail.com', TEST_ISSUE_NEW_PASSWORD)
@@ -60,6 +63,12 @@ class Testapi_issue(TestCase):
         payload=test_api_update_status_payload
         response=self.client.post(url,data=payload)
         self.assertEqual(response.status_code,201)
+
+    # def test_get_issue_assigned_to_user_api(self):
+    #     url=self.base_url+'/get-issues-user/'
+    #     response=self.client.get(url,)
+    #     self.assertEqual(response.status_code,201)
+    #     # self.assertEqual(response.data[0].get('as'))
 
 
 
