@@ -10,8 +10,9 @@ from Issues.models import Issues, Sprint
 
 class TestIssues(TestCase):
     def setUp(self):
-        self.project_object= Project.objects.create(name=TEST_PROJECT_NAME,description=TEST_PROJECT_DESCRIPTION)
         self.user = User.objects.create_user(TEST_ISSUE_NEW_USERNAME, TEST_ISSUE_NEW_EMAIL,TEST_ISSUE_NEW_PASSWORD)
+        self.project_object = Project.objects.create(name=TEST_PROJECT_NAME, description=TEST_PROJECT_DESCRIPTION,
+                                                     user=self.user)
         Issues.objects.create(title=TEST_ISSUE_TITILE, description=TEST_ISSUE_DESC, project=self.project_object,
                               issue_type=TEST_ISSUE_BUG, summary=TEST_ISSUE_SUMMARY, priority=TEST_ISSUE_PRIORITY,
                               labels=TEST_ISSUE_LABELS,assignee=self.user)
@@ -55,13 +56,21 @@ class TestIssues(TestCase):
         get_all_issues_of_project=Issues.issue_manager.get_all_issues_of_project(1)
         self.assertTrue(type(get_all_issues_of_project[0]) is Issues)
 
+    def test_get_all_issues_of_project_pagination(self):
+        p_id=1
+        offset=1
+        limit=2
+        filtered_objs = Issues.issue_manager.get_all_issues_of_project_without_ordering(p_id)[offset - 1:limit]
+        self.assertEqual(len(filtered_objs), 1)
+
+    def test_assign_issue_to_user(self):
+        fetchetd_issues=Issues.issue_manager.assign_issue_to_user(1,1)
+        self.assertEqual(fetchetd_issues.assignee.id, 1)
 
 
-
-
-
-
-
-
-
+    def test_update_issue_status(self):
+        issue_id=1
+        update='AG'
+        update_status=Issues.issue_manager.update_issue_status(issue_id,update)
+        self.assertEqual(update_status.status,'AG')
 

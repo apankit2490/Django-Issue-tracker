@@ -54,7 +54,7 @@ class Testapi_issue(TestCase):
         payload=test_api_assign_issue_payoad
         response=self.client.post(url,data=payload)
         self.assertEqual(response.status_code,201)
-        self.assertTrue(response.data.get('titile') is None)
+
 
 
 

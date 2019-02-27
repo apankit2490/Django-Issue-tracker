@@ -37,6 +37,38 @@ class IssueManager(models.Manager):
         else:
             return None
 
+    def update_issue_status(self,issue_id, updated_status):
+        issue_object=Issues.objects.get(id=issue_id)
+        status=issue_object.status
+        if(status=='OP' and updated_status=='AG'):
+            issue_object.status=updated_status
+            issue_object.save()
+            return issue_object
+
+        elif(status=='AG' and updated_status=='IP'):
+            issue_object.status=updated_status
+            issue_object.save()
+            return issue_object
+
+        elif (status == 'IP' and updated_status == 'UR'):
+            issue_object.status = updated_status
+            issue_object.save()
+            return issue_object
+
+        elif (status == 'UR' and updated_status == 'DN'):
+            issue_object.status = updated_status
+            issue_object.save()
+            return issue_object
+
+        elif (status == 'DN' and updated_status == 'CL'):
+            issue_object.status = updated_status
+            issue_object.save()
+            return issue_object
+
+        else:
+            raise ObjectDoesNotExist
+
+
     #
     # def get_issue_assigned_to_user(self,user_id):
     #     self.
